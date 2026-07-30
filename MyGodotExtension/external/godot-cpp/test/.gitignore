@@ -1,12 +1,16 @@
+# Generated directories with binaries
+build
+bin
+
 # Godot 4+ specific ignores
 .godot/
-.nomedia
 
 # Godot-specific ignores
 .import/
 export.cfg
-export_credentials.cfg
-*.tmp
+export_presets.cfg
+# Dummy HTML5 export presets file for continuous integration
+!.github/dist/export_presets.cfg
 
 # Imported translations (automatically generated from CSV files)
 *.translation
@@ -16,10 +20,6 @@ export_credentials.cfg
 data_*/
 mono_crash.*.json
 
-# Ignore compiled GDExtension library build artifacts
-*.lib
-*.a
-*.obj
-*.o
-build/
-bin/
+# System/tool-specific ignores
+.directory
+*~
