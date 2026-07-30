@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dih5ae8kkek2r"]
+
+[node name="Node2D" type="Node2D" unique_id=1229424094]
+
+[node name="ExampleNode" type="ExampleNode" parent="." unique_id=1314605552]
+position = Vector2(23436.89, 0)
