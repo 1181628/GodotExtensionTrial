@@ -1,0 +1,54 @@
+// 固定结构：读取并定义这个文件
+#ifndef （文件名全大写）
+#define （文件名全大写）
+
+// 固定结构：把 Godot C++ 的你想读取的父类名读取进来
+#include <godot_cpp/classes/（父类名）.hpp>
+
+// 固定结构：表示接下来的代码属于 godot 命名空间
+namespace godot {
+
+// 固定结构：创造一个类，和它要继承的父类下的功能
+class （新建类名） : public （父类名） {
+	GDCLASS(（新建类名）, （父类名）)
+
+//固定结构：表示下面的变量和函数只能在新建类内部直接使用
+private:
+	// ==============================
+	// 自己写：游戏需要保存的变量
+	// 例如：
+	// double gravity = 580.0;
+	// double move_speed = 200.0;
+	// double jump_speed = 300.0;
+	// int health = 100;
+	// ==============================
+
+//固定结构：表示下面的内容主要给当前类以及它的子类使用
+protected:
+	// 固定结构：暂时不需要背
+	static void _bind_methods();
+
+//固定结构：表示下面的函数可以从类外部访问
+public:
+	// 固定结构：构造和析构函数
+	（新建类名()）;
+	~（新建类名()）;
+
+	// 根据需要保留：声明节点创建完成时执行一次
+	void _ready() override;
+
+	// 角色移动通常需要：声明每个物理帧执行
+	void _physics_process(double delta) override;
+
+	// ==============================
+	// 自己写：你创建的其他函数声明
+	// 例如：
+	// void take_damage(int damage);
+	// void jump();
+	// void attack();
+	// ==============================
+};
+
+}
+
+#endif
