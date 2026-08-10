@@ -25,7 +25,7 @@ void Player::_physics_process(double delta) {
         return;
     }
 
-    Input *input = Input::get_singleton();
+    Input * input = Input::get_singleton();
     Vector2 velocity = get_velocity();
 
     // gravity
@@ -41,6 +41,16 @@ void Player::_physics_process(double delta) {
     // move left and right
     double moveVector_x = input->get_axis("move_left", "move_right");
     velocity.x += moveVector_x * horizontal_acceleration * delta;
+    if (velocity.x < -maxHorizontalSpeed) {
+        velocity.x = -maxHorizontalSpeed;
+    }
+    if (velocity.x > maxHorizontalSpeed) {
+        velocity.x = maxHorizontalSpeed;
+    }
+
+    if (velocity.x == 0) {
+        velocity.x = velocity.x / 2 * delta;
+    }
 
     set_velocity(velocity);
     move_and_slide();

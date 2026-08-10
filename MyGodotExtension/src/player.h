@@ -13,7 +13,7 @@ private:
 	double gravity = 580.0;
     double horizontal_acceleration = 2000.0;
 	double vertical_acceleration = -200.0;
-	
+	double maxHorizontalSpeed = 200.0;
 
 protected:
 	static void _bind_methods();
