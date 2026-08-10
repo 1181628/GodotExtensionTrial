@@ -6,4 +6,4 @@
 void initialize_gdextension_types(godot::ModuleInitializationLevel p_level);
 void uninitialize_gdextension_types(godot::ModuleInitializationLevel p_level);
 
-#endif // REGISTER_TYPES_H
+#endif
