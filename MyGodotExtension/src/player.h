@@ -12,8 +12,8 @@ class Player : public CharacterBody2D {
 private:
 	double gravity = 580.0;
     double horizontal_acceleration = 2000.0;
-	double vertical_acceleration = -200.0;
-	double maxHorizontalSpeed = 200.0;
+	double maxHorizontalSpeed = 120.0;
+	double jumpSpeed = 250.0;
 
 protected:
 	static void _bind_methods();
@@ -22,8 +22,11 @@ public:
 	Player();
 	~Player();
 
+	// Godot callback functions
 	void _ready() override;
 	void _physics_process(double delta) override;
+	// Custom action functions
+	void _update_animation();
 };
 
 }

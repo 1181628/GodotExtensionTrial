@@ -4,6 +4,7 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/animation_player.hpp>
 
 using namespace godot;
 
@@ -21,11 +22,9 @@ void Player::_ready() {
 
 
 void Player::_physics_process(double delta) {
-    if (Engine::get_singleton()->is_editor_hint()) {
-        return;
-    }
-
+    // Access Godot’s input system
     Input * input = Input::get_singleton();
+    // Get the player’s current velocity
     Vector2 velocity = get_velocity();
 
     // gravity
@@ -33,14 +32,26 @@ void Player::_physics_process(double delta) {
         velocity.y += gravity * delta;
     }
 
+    // get movement
+    double moveVector_y = 0;
+    if (input->is_action_just_pressed("jump")) {
+        moveVector_y = -1;
+    }
+    double moveVector_x = input->get_axis("move_left", "move_right");
+
     // jump
-    if (input->is_action_just_pressed("jump") && is_on_floor()) {
-        velocity.y = vertical_acceleration;
+    if (moveVector_y == -1 && is_on_floor()) {
+        velocity.y = jumpSpeed * moveVector_y;
     }
 
     // move left and right
-    double moveVector_x = input->get_axis("move_left", "move_right");
-    velocity.x += moveVector_x * horizontal_acceleration * delta;
+    if (moveVector_x != 0 ) {
+        velocity.x += moveVector_x * horizontal_acceleration * delta;
+    } else {
+        velocity.x = velocity.x / 2;
+    }
+    
+    // 
     if (velocity.x < -maxHorizontalSpeed) {
         velocity.x = -maxHorizontalSpeed;
     }
@@ -48,10 +59,16 @@ void Player::_physics_process(double delta) {
         velocity.x = maxHorizontalSpeed;
     }
 
-    if (velocity.x == 0) {
-        velocity.x = velocity.x / 2 * delta;
-    }
-
+    // Store modified velocity
     set_velocity(velocity);
+    // Move the character
     move_and_slide();
+    _update_animation();
+}
+
+void Player::_update_animation() {
+    AnimationPlayer *animationPlayer = get_node<AnimationPlayer>("AnimationPlayer");
+
+    animationPlayer->play("idle");  
+
 }
