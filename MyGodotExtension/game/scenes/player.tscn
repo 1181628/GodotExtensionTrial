@@ -66,7 +66,7 @@ tracks/4/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_qhqgy"]
-resource_name = "standing"
+resource_name = "idle"
 length = 0.9333367153439672
 loop_mode = 1
 tracks/0/type = "value"
@@ -198,7 +198,7 @@ tracks/4/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dqkch"]
 _data = {
 &"RESET": SubResource("Animation_g2els"),
-&"standing": SubResource("Animation_qhqgy"),
+&"idle": SubResource("Animation_qhqgy"),
 &"walking": SubResource("Animation_3vyb7")
 }
 
