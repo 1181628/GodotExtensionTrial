@@ -34,10 +34,10 @@ void Player::_physics_process(double delta) {
 
     // get movement
     double moveVector_y = 0;
-    if (input->is_action_just_pressed("jump")) {
+    if (input->is_action_just_pressed("ui_accept")) {
         moveVector_y = -1;
     }
-    double moveVector_x = input->get_axis("move_left", "move_right");
+    double moveVector_x = input->get_axis("ui_left", "ui_right");
 
     // jump
     if (moveVector_y == -1 && is_on_floor()) {
