@@ -297,5 +297,5 @@ tile_set = SubResource("TileSet_xmr8x")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=315770324]
 
 [node name="Player" parent="." unique_id=1724129817 instance=ExtResource("2_pw63i")]
-position = Vector2(0, -0.0008675009)
+position = Vector2(0, -0.0010418892)
 velocity = Vector2(0, 0)
