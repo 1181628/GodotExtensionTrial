@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://jndfm2rl4asr"
-path="res://.godot/imported/精灵-0005.png-66bfc5a83352b68f01b78dbb8ed989e2.ctex"
+uid="uid://lqco8vqnpgk0"
+path="res://.godot/imported/Player Attack 1.png-4acdee8c39e6f8c144b19a45a9f7fb7d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/精灵-0005.png"
-dest_files=["res://.godot/imported/精灵-0005.png-66bfc5a83352b68f01b78dbb8ed989e2.ctex"]
+source_file="res://assets/player/Player Attack 1.png"
+dest_files=["res://.godot/imported/Player Attack 1.png-4acdee8c39e6f8c144b19a45a9f7fb7d.ctex"]
 
 [params]
 

@@ -22,6 +22,10 @@ void Player::_ready() {
 
 
 void Player::_physics_process(double delta) {
+    if (Engine::get_singleton()->is_editor_hint()) {
+        return;
+    }
+
     // Access Godot’s input system
     Input * input = Input::get_singleton();
     // Get the player’s current velocity
