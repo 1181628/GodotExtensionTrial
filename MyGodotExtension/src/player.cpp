@@ -63,6 +63,50 @@ void Player::change_state(int new_state) {
     is_state_new = true;
 }
 
+void Player::apply_gravity_movement(double delta) {
+    // Access Godot’s input system
+    Input * input = Input::get_singleton();
+    // Get the player’s current velocity
+    Vector2 velocity = get_velocity();
+
+    // gravity
+    if (!is_on_floor()) {
+        velocity.y += gravity * delta;
+    }
+
+    // get movement
+    double moveVector_y = 0;
+    if (input->is_action_just_pressed("ui_accept")) {
+        moveVector_y = -1;
+    }
+    double moveVector_x = input->get_axis("ui_left", "ui_right");
+
+    // jump
+    if (moveVector_y == -1 && is_on_floor()) {
+        velocity.y = jumpSpeed * moveVector_y;
+    }
+
+    // move left and right
+    if (moveVector_x != 0 ) {
+        velocity.x += moveVector_x * horizontal_acceleration * delta;
+    } else {
+        velocity.x = velocity.x / 2;
+    }
+    
+    // limit left right speed
+    if (velocity.x < -maxHorizontalSpeed) {
+        velocity.x = -maxHorizontalSpeed;
+    }
+    if (velocity.x > maxHorizontalSpeed) {
+        velocity.x = maxHorizontalSpeed;
+    }
+
+    // Store modified velocity
+    set_velocity(velocity);
+    // Move the character
+    move_and_slide();
+}
+
 void Player::process_normal(double delta) {
     // Access Godot’s input system
     Input * input = Input::get_singleton();
@@ -131,6 +175,7 @@ void Player::process_attack(double delta) {
 
     set_velocity(velocity);
     move_and_slide();
+    apply_gravity_movement(delta);
 }
 
 void Player::process_attack_up(double delta) {

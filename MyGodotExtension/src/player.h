@@ -12,9 +12,9 @@ class Player : public CharacterBody2D {
 
 private:
 	double gravity = 580.0;
-    double horizontal_acceleration = 2000.0;
+    double horizontal_acceleration = 2500.0;
 	double maxHorizontalSpeed = 120.0;
-	double jumpSpeed = 210.0;
+	double jumpSpeed = 250.0;
 
 	// all possible player states
 	enum class State {
@@ -29,9 +29,9 @@ private:
 
 	// Records whether the player has just entered a new state
     bool is_state_new = true;
-
 	void change_state(int new_state);
 
+	void apply_gravity_movement(double delta);
 	void process_normal(double delta);
     void process_dash(double delta);
     void process_attack(double delta);
