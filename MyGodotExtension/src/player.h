@@ -41,6 +41,8 @@ private:
 	// Changes the player's animation
     void _update_animation();
 
+	void _turn_direction();
+
 protected:
 	static void _bind_methods();
 
