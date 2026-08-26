@@ -12,7 +12,7 @@ class Player : public CharacterBody2D {
 
 private:
 	double gravity = 580.0;
-    double horizontal_acceleration = 2500.0;
+    double horizontal_acceleration = 1000.0;
 	double maxHorizontalSpeed = 120.0;
 	double jumpSpeed = 250.0;
 
