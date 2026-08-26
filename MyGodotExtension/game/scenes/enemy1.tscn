@@ -1,0 +1,177 @@
+[gd_scene format=3 uid="uid://bmyd6sgjssw6f"]
+
+[ext_resource type="Shader" uid="uid://bl123d7ixdnsy" path="res://scenes/enemy1.gdshader" id="1_nb0t0"]
+[ext_resource type="Texture2D" uid="uid://bxc24478rptl3" path="res://assets/enemy/Enemy1 Idle.png" id="1_ppmo8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j20lk"]
+shader = ExtResource("1_nb0t0")
+
+[sub_resource type="Animation" id="Animation_nb0t0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteArea/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_ppmo8")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteArea/Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteArea/Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteArea/Sprite2D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, -24)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteArea/Sprite2D:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_n665k"]
+resource_name = "idle"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteArea/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_ppmo8")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteArea/Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteArea/Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteArea/Sprite2D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, -24)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteArea/Sprite2D:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lowyn"]
+_data = {
+&"RESET": SubResource("Animation_nb0t0"),
+&"idle": SubResource("Animation_n665k")
+}
+
+[node name="Enemy1" type="Enemy1" unique_id=1374764047]
+collision_layer = 0
+
+[node name="SpriteArea" type="Area2D" parent="." unique_id=1380712501]
+
+[node name="Sprite2D" type="Sprite2D" parent="SpriteArea" unique_id=1998643294]
+material = SubResource("ShaderMaterial_j20lk")
+use_parent_material = true
+position = Vector2(2, -24)
+texture = ExtResource("1_ppmo8")
+hframes = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=613592365]
+libraries/ = SubResource("AnimationLibrary_lowyn")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1835049880]
+polygon = PackedVector2Array(-15, 0, 15, 0, 15, -39, -15, -39)
+
+[node name="HurtboxArea" type="Area2D" parent="." unique_id=1560409732]
+collision_layer = 4
+collision_mask = 0
+
+[node name="Hurtbox" type="CollisionPolygon2D" parent="HurtboxArea" unique_id=2138409816]
+polygon = PackedVector2Array(-15, 0, 15, 0, 15, -39, -15, -39)
+
+[node name="HitboxArea" type="Area2D" parent="." unique_id=954982171]
+collision_layer = 0
+collision_mask = 2
+
+[node name="Hitbox" type="CollisionPolygon2D" parent="HitboxArea" unique_id=1568702901]
+polygon = PackedVector2Array(-15, 0, 15, 0, 15, -39, -15, -39)
+
+[node name="MaterialTimer" type="Timer" parent="." unique_id=1647296324]
+wait_time = 0.1
+one_shot = true
