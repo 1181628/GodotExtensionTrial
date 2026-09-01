@@ -5,10 +5,7 @@
 #include <godot_cpp/classes/area2d.hpp>
 #include <godot_cpp/classes/sprite2d.hpp>
 #include <godot_cpp/classes/timer.hpp>
-
-// Add other Godot classes or data types when needed.
-// #include <godot_cpp/variant/vector2.hpp>
-// #include <godot_cpp/variant/string.hpp>
+#include <godot_cpp/variant/vector2.hpp>
 
 namespace godot {
 
@@ -17,10 +14,31 @@ class Enemy1 : public CharacterBody2D {
     GDCLASS(Enemy1, CharacterBody2D);
 
 private:
-    // Add variables that the class needs to store.
-    // int health = 100;
-    // double move_speed = 200.0;
-    // bool is_active = true;
+    double gravity = 1000;
+    double walkSpeed = 40;
+    double attackRange = 35;
+
+    // all possible enemy1 states
+	enum class State {
+        NORMAL,
+        WALK,
+        ATTACK,
+    };
+	// record the enemy1's initial state
+	State current_state = State::NORMAL;
+
+	// Records whether the enemy1 has just entered a new state
+    bool is_state_new = true;
+	void change_state(int new_state);
+
+    void process_normal(double delta);
+    void process_walk(double delta);
+    void process_attack(double delta);
+
+    void _turn_direction();
+
+    godot::Vector2 playerPosition;
+    void match_player_position();   
 
 protected:
     static void _bind_methods();
@@ -34,11 +52,6 @@ public:
     void _process(double delta) override;
     void _on_hurtbox_area_entered(godot::Area2D *area);
     void _on_material_timer_timeout();
-
-    // Declare custom functions here.
-    // void take_damage(int damage);
-    // void attack();
-    // bool is_alive() const;
 };
 
 }
