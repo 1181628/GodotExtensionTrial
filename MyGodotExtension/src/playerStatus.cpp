@@ -17,7 +17,7 @@ void PlayerStatus::_bind_methods() {
 }
 
 void PlayerStatus::_ready() {
-    // Prevents gameplay code from running inside the editor
+    // Stop the function running before the game starts
     if (Engine::get_singleton()->is_editor_hint()) {
         return;
     }

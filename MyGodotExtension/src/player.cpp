@@ -22,11 +22,6 @@ void Player::_bind_methods() {
 }
 
 void Player::_ready() {
-        // Stop the function running before the game starts
-    if (Engine::get_singleton()->is_editor_hint()) {
-        return;
-    }
-
     // Adds the Player to the "player" group so enemies can find it
     add_to_group("player");
     
@@ -41,6 +36,10 @@ void Player::_ready() {
 
 // =================================== PLAYER STATE MACHINE ===================================
 void Player::_physics_process(double delta) {
+    // Stop the function running before the game starts
+    if (Engine::get_singleton()->is_editor_hint()) {
+        return;
+    }
     //  Runs the behaviour belonging to the current state
     switch (current_state) {
         case State::NORMAL:

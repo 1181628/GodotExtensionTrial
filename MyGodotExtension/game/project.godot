@@ -15,12 +15,16 @@ run/main_scene="uid://6wgjl2oe2wm6"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Status="*uid://bboa207c573r6"
+
 [display]
 
 window/size/viewport_width=320
 window/size/viewport_height=180
-window/size/window_width_override=2560
-window/size/window_height_override=1440
+window/size/window_width_override=1280
+window/size/window_height_override=720
 window/stretch/mode="viewport"
 
 [input]

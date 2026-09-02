@@ -176,8 +176,8 @@ tile_map_data = PackedByteArray("AAD+/wQAAAABAAAAAAD+/wUAAAABAAEAAAD//wQAAAABAAA
 tile_set = SubResource("TileSet_qwcan")
 
 [node name="Enemy1" parent="." unique_id=705458289 instance=ExtResource("3_7ykc4")]
-position = Vector2(109, 80)
+position = Vector2(34.969063, 80)
 
 [node name="Player" parent="." unique_id=1724129817 instance=ExtResource("2_pw63i")]
-position = Vector2(-3, 20)
+position = Vector2(-113, 79.98451)
 velocity = Vector2(0, 0)
