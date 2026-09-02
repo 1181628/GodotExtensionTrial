@@ -84,18 +84,6 @@ tracks/5/keys = {
 "update": 0,
 "values": [PackedVector2Array()]
 }
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("AttackHitboxArea/AttackHitbox:disabled")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
 
 [sub_resource type="Animation" id="Animation_iolyx"]
 resource_name = "attack"
@@ -168,22 +156,10 @@ tracks/5/path = NodePath("AttackHitboxArea/AttackHitbox:polygon")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.7, 0.90000004, 1.1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.5, 0.51, 0.7, 0.71, 0.90000004, 0.9100001, 1.1, 1.11, 1.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [PackedVector2Array(), PackedVector2Array(38, -41, 17, -55, -4, -60, -26, -56, -36, -43, -36, -21, -25, 0, -7, 0, -19, -29, -18, -46, -6, -50, 14, -50), PackedVector2Array(33, -45, 19, -55, -5, -59, -25, -56, -34, -46, -35, -29, -31, -9, -23, 0, -3, 0, -19, -14, -25, -32, -24, -41, -16, -51, -1, -54, 17, -52), PackedVector2Array(-12, -57, -21, -57, -28, -54, -34, -45, -35, -36, -33, -17, -30, -7, -22, 0, -3, 0, -17, -6, -26, -15, -30, -23, -31, -41, -29, -50, -23, -55), PackedVector2Array()]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("AttackHitboxArea/AttackHitbox:disabled")
-tracks/6/interp = 0
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, true]
+"values": [PackedVector2Array(), PackedVector2Array(), PackedVector2Array(-26, 0, -36, -21, -36, -41, -32, -51, -23, -57, -7, -59, 19, -55, 38, -41, 16, -50, -12, -49, -19, -39, -6, 0), PackedVector2Array(-26, 0, -36, -21, -36, -41, -32, -51, -23, -57, -7, -59, 19, -55, 38, -41, 16, -50, -12, -49, -19, -39, -6, 0), PackedVector2Array(-25, 0, -32, -12, -35, -31, -34, -45, -25, -56, -5, -59, 18, -56, 33, -45, 17, -52, -13, -52, -25, -33, -3, 0), PackedVector2Array(-25, 0, -32, -12, -35, -31, -34, -45, -25, -56, -5, -59, 18, -56, 33, -45, 17, -52, -13, -52, -25, -33, -3, 0), PackedVector2Array(-25, 0, -31, -10, -35, -28, -35, -42, -30, -52, -21, -57, -6, -57, -25, -54, -30, -26, -13, 0), PackedVector2Array(-25, 0, -31, -10, -35, -28, -35, -42, -30, -52, -21, -57, -6, -57, -25, -54, -30, -26, -13, 0), PackedVector2Array(), PackedVector2Array()]
 }
 
 [sub_resource type="Animation" id="Animation_ncnv8"]
@@ -383,7 +359,6 @@ tracks/4/keys = {
 [sub_resource type="Animation" id="Animation_lowyn"]
 resource_name = "walk"
 length = 1.2000100178815425
-loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -497,7 +472,6 @@ collision_layer = 16
 collision_mask = 2
 
 [node name="AttackHitbox" type="CollisionPolygon2D" parent="AttackHitboxArea" unique_id=1570807202]
-disabled = true
 
 [node name="MaterialTimer" type="Timer" parent="." unique_id=1647296324]
 wait_time = 0.1
