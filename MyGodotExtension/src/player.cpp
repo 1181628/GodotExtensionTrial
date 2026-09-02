@@ -1,4 +1,5 @@
 #include "player.h"
+#include "playerStatus.h"
 
 #include <godot_cpp/variant/vector2.hpp>
 #include <godot_cpp/classes/input.hpp>
@@ -174,7 +175,7 @@ void Player::_update_animation() {
         }
     }
     else if (moveVector_x != 0) {
-        animationPlayer->play("run"); 
+        animationPlayer->play("idle"); 
     }
     else {
         animationPlayer->play("idle");         
@@ -262,7 +263,12 @@ void Player::_turn_direction() {
 
 // Runs when another Area2D enters the Player's hurtbox
 void Player::_on_hurtbox_area_entered(Area2D *area) {
-    // Reduce player health here
+    (void)area;
+    PlayerStatus *player_status = get_node<PlayerStatus>("/root/Status");
+    // Reduces the Player's health
+    player_status->playerStatusValue -= 1;
+    // Updates the health bar animation
+    player_status->refresh_player_status();
 }
 
 // Runs when the Player's attack touches another Area2D
