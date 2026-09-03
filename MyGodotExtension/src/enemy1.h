@@ -17,12 +17,14 @@ private:
     double gravity = 1000;
     double walkSpeed = 40;
     double attackRange = 35;
+    double Health = 1000;
 
     // all possible enemy1 states
 	enum class State {
         NORMAL,
         WALK,
         ATTACK,
+        DIE
     };
 	// record the enemy1's initial state
 	State current_state = State::NORMAL;
@@ -34,6 +36,7 @@ private:
     void process_normal(double delta);
     void process_walk(double delta);
     void process_attack(double delta);
+    void process_die(double delta);
 
     void _turn_direction();
 

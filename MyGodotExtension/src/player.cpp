@@ -8,6 +8,8 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/sprite2d.hpp>
 #include <godot_cpp/classes/area2d.hpp>
+#include <godot_cpp/classes/timer.hpp>
+#include <godot_cpp/classes/collision_polygon2d.hpp>
 
 using namespace godot;
 
@@ -24,6 +26,12 @@ void Player::_bind_methods() {
 void Player::_ready() {
     // Adds the Player to the "player" group so enemies can find it
     add_to_group("player");
+
+    Timer *invincibility_timer = get_node<Timer>("InvincibilityTimer");
+    invincibility_timer->connect("timeout", callable_mp(this, &Player::_on_invincibility_timer_timeout));
+
+    Timer *flash_timer = get_node<Timer>("FlashTimer");
+    flash_timer->connect("timeout", callable_mp(this, &Player::_on_flash_timer_timeout));
     
     // Connects Player's hurtbox signal
     Area2D *hurtbox_area = get_node<Area2D>("HurtboxArea");
@@ -35,11 +43,12 @@ void Player::_ready() {
 
 
 // =================================== PLAYER STATE MACHINE ===================================
-void Player::_physics_process(double delta) {
+void Player::_physics_process(double delta) {     
     // Stop the function running before the game starts
     if (Engine::get_singleton()->is_editor_hint()) {
         return;
     }
+    
     //  Runs the behaviour belonging to the current state
     switch (current_state) {
         case State::NORMAL:
@@ -60,6 +69,14 @@ void Player::_physics_process(double delta) {
 
         case State::ATTACK_DOWN:
             process_attack_down(delta);
+            break;
+
+        case State::HURT:
+            process_hurt(delta);
+            break;
+
+        case State::DIE:
+            process_die(delta);
             break;
     }
     // After this physics frame, the current state is no longer new
@@ -157,6 +174,82 @@ void Player::process_attack_down(double delta) {
     current_state = State::NORMAL;
 }
 
+// ================================== HURT STATE ===================================
+void Player::process_hurt(double delta) {
+    AnimationPlayer * animationPlayer = get_node<AnimationPlayer>("AnimationPlayer");
+    Vector2 velocity = get_velocity();
+
+    // Play the hurt animation once when entering HURT
+    if (is_state_new) {
+        Sprite2D * sprite = get_node<Sprite2D>("Sprite2D");
+        Area2D *attack1_area = get_node<Area2D>("Attack1");
+        Area2D *hurtbox_area = get_node<Area2D>("HurtboxArea");
+
+        // When the Player moves, flip the sprite to face the direction it was moving toward
+        if (hurtDirection == "right") {
+            velocity.x = 35;
+            sprite->set_flip_h(true);
+
+            Vector2 attack1_scale =attack1_area->get_scale();
+            attack1_scale.x = -1;
+            attack1_area->set_scale(attack1_scale);
+
+            Vector2 hurtbox_scale = hurtbox_area->get_scale();
+            hurtbox_scale.x = -1;
+            hurtbox_area->set_scale(hurtbox_scale);
+
+        }
+        if (hurtDirection == "left") {
+            velocity.x = -35;
+            sprite->set_flip_h(false);
+
+            Vector2 attack1_scale = attack1_area->get_scale();
+            attack1_scale.x = 1;
+            attack1_area->set_scale(attack1_scale);
+
+            Vector2 hurtbox_scale = hurtbox_area->get_scale();
+            hurtbox_scale.x = 1;
+            hurtbox_area->set_scale(hurtbox_scale);
+        }
+        velocity.y = -100;
+        animationPlayer->play("getHit");
+    }
+
+    // Applies gravity during the knockback
+    if (!is_on_floor()) {
+        velocity.y += gravity * delta;
+    }
+    // Saves and applies the knockback velocity
+    set_velocity(velocity);
+    move_and_slide();
+
+    // Return to NORMAL when the attack animation finishes
+    if (!animationPlayer->is_playing()) {
+        call_deferred("change_state", static_cast<int>(State::NORMAL));
+    }
+}
+
+// ================================== DIE STATE ===================================
+void Player::process_die(double delta) {
+    AnimationPlayer * animationPlayer = get_node<AnimationPlayer>("AnimationPlayer");
+    Vector2 velocity = get_velocity();
+
+    // Applies gravity during the knockback
+    if (!is_on_floor()) {
+        velocity.y += gravity * delta;
+    }
+    // Saves and applies the knockback velocity
+    set_velocity(velocity);
+    move_and_slide();
+
+    // Play the die animation once when entering DIE
+    if (is_state_new) {
+        get_node<CollisionPolygon2D>("HurtboxArea/Hurtbox")->set_disabled(true);
+        get_node<Timer>("InvincibilityTimer")->stop();
+        animationPlayer->play("death");
+    }
+}
+
 // Selects an animation based on movement and floor status
 void Player::_update_animation() {
     AnimationPlayer * animationPlayer = get_node<AnimationPlayer>("AnimationPlayer");
@@ -179,7 +272,7 @@ void Player::_update_animation() {
     else {
         animationPlayer->play("idle");         
     }
-}
+}   
 
 // Applies gravity, jumping and horizontal movement
 void Player::apply_gravity_movement(double delta) {
@@ -226,6 +319,47 @@ void Player::apply_gravity_movement(double delta) {
     move_and_slide();
 }
 
+void Player::start_invincibility() {
+    isInvincible = true;
+
+    CollisionPolygon2D *hurtbox =get_node<CollisionPolygon2D>("HurtboxArea/Hurtbox");
+    // Disables the Player's hurtbox temporarily
+    hurtbox->set_deferred("disabled", true);
+
+    // Starts the invincibility duration
+    get_node<Timer>("InvincibilityTimer")->start();
+    // Starts the flashing effect
+    get_node<Timer>("FlashTimer")->start();
+}
+
+// Switches the Player between visible and invisible
+void Player::_on_flash_timer_timeout() {
+    Sprite2D *sprite = get_node<Sprite2D>("Sprite2D");
+    sprite->set_visible(!sprite->is_visible());
+}
+
+// Ends the Player's invincibility frames
+void Player::_on_invincibility_timer_timeout() {
+    isInvincible = false;
+
+    CollisionPolygon2D *hurtbox =get_node<CollisionPolygon2D>("HurtboxArea/Hurtbox");
+    Sprite2D *sprite = get_node<Sprite2D>("Sprite2D");
+
+    // Stops the flashing effect
+    get_node<Timer>("FlashTimer")->stop();
+
+    // Makes sure the Player is visible
+    sprite->set_visible(true);
+    // Enables the Player's hurtbox again
+    hurtbox->set_deferred("disabled", false);
+
+    // Only enables the hurtbox while the Player is alive
+    if (current_state != State::DIE) {
+        get_node<CollisionPolygon2D>("HurtboxArea/Hurtbox")->set_disabled(false);
+    }
+
+}
+
 // Turns the Player and its collision areas towards the movement direction
 void Player::_turn_direction() {
     Input *input = Input::get_singleton();
@@ -262,12 +396,33 @@ void Player::_turn_direction() {
 
 // Runs when another Area2D enters the Player's hurtbox
 void Player::_on_hurtbox_area_entered(Area2D *area) {
-    (void)area;
+    // Ignores damage during the invincibility frames
+    if (isInvincible) {
+        return;
+    }
+
     PlayerStatus *player_status = get_node<PlayerStatus>("/root/Status");
     // Reduces the Player's health
     player_status->playerStatusValue -= 1;
     // Updates the health bar animation
     player_status->refresh_player_status();
+
+    // Checks whether the attack came from which side
+    if (area->get_global_position().x > get_global_position().x) {
+        hurtDirection = "left";
+    }
+    else {
+        hurtDirection = "right";
+    }
+
+    if (player_status->playerStatusValue <= 0) {
+        call_deferred("change_state", static_cast<int>(State::DIE));
+    }
+    else {
+        // Starts the invincibility frames
+        start_invincibility();
+        call_deferred("change_state", static_cast<int>(State::HURT));
+    }
 }
 
 // Runs when the Player's attack touches another Area2D

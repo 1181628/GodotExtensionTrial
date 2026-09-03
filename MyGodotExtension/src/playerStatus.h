@@ -17,7 +17,7 @@ public:
     PlayerStatus();
     ~PlayerStatus();
 
-    int playerStatusValue = 4;
+    int playerStatusValue = 5;
 
     void _ready() override;
 
