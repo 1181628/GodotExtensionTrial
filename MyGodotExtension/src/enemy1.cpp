@@ -36,6 +36,7 @@ void Enemy1::_process(double delta) {
         return;
     }
 
+    // Find player's position
     match_player_position();
 
     //  Runs the behaviour belonging to the current state
