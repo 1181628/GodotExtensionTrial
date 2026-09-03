@@ -17,12 +17,12 @@ void PlayerStatus::_bind_methods() {
 }
 
 void PlayerStatus::_ready() {
-    // Stop the function running before the game starts
+    // Prevents gameplay code from running inside the editor
     if (Engine::get_singleton()->is_editor_hint()) {
         return;
     }
 
-    playerStatusValue = 4;
+    playerStatusValue = 5;
     // Displays the starting health bar animation
     refresh_player_status();
 }
@@ -31,9 +31,6 @@ void PlayerStatus::refresh_player_status() {
     AnimationPlayer *animationPlayer = get_node<AnimationPlayer>("AnimationPlayer");
 
     // Plays an animation matching the current health value
-    if (playerStatusValue == 0) {
-        animationPlayer->play("0");
-    }
     if (playerStatusValue == 1) {
         animationPlayer->play("1");
     }
@@ -46,14 +43,17 @@ void PlayerStatus::refresh_player_status() {
     if (playerStatusValue == 4) {
         animationPlayer->play("4");
     }
+    if (playerStatusValue == 5) {
+        animationPlayer->play("5");
+    }
     // Prevents the health value from going below 0
-    if (playerStatusValue < 0) {
+    if (playerStatusValue <= 0) {
         playerStatusValue = 0;
         animationPlayer->play("0");
     }
-    // Prevents the health value from going above 4
-    if (playerStatusValue > 4) {
-        playerStatusValue = 4;
-        animationPlayer->play("4");
+    // Prevents the health value from going above 5
+    if (playerStatusValue > 5) {
+        playerStatusValue = 5;
+        animationPlayer->play("5");
     }
 }

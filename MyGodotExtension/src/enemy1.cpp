@@ -6,6 +6,7 @@
 #include <godot_cpp/classes/node2d.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/variant/typed_array.hpp>
+#include <godot_cpp/classes/collision_polygon2d.hpp>
 
 using namespace godot;
 
@@ -20,11 +21,6 @@ void Enemy1::_bind_methods() {
 }
 
 void Enemy1::_ready() {
-    // Stop the function running before the game starts
-    if (Engine::get_singleton()->is_editor_hint()) {
-        return;
-    }
-
     // Connects Enemy1's hurtbox signal
     Area2D *hurtbox_area = get_node<Area2D>("HurtboxArea");
     hurtbox_area->connect("area_entered", callable_mp(this, &Enemy1::_on_hurtbox_area_entered));
@@ -35,6 +31,11 @@ void Enemy1::_ready() {
 
 // ================================== ENEMY1 STATE MACHINE ===================================
 void Enemy1::_process(double delta) {
+    // Stop the function running before the game starts
+    if (Engine::get_singleton()->is_editor_hint()) {
+        return;
+    }
+
     match_player_position();
 
     //  Runs the behaviour belonging to the current state
@@ -49,6 +50,10 @@ void Enemy1::_process(double delta) {
 
         case State::ATTACK:
             process_attack(delta);
+            break;
+
+        case State::DIE:
+            process_die(delta);
             break;
     }
     // After this physics frame, the current state is no longer new
@@ -72,10 +77,10 @@ void Enemy1::process_normal(double delta) {
     // Stops all movement while Enemy1 is idle
     Vector2 velocity = get_velocity();
     velocity.x = 0;
-    velocity.y = 0;
-    
+    velocity.y = 0;    
     set_velocity(velocity);
     move_and_slide();
+    
     _turn_direction();
 
     // Plays idle once when entering NORMAL
@@ -135,6 +140,8 @@ void Enemy1::process_attack(double delta) {
     // Stops all movement during the attack
     velocity.x = 0;
     velocity.y = 0;
+    set_velocity(velocity);
+    move_and_slide();
 
     // Plays attack once when entering ATTACK
     if (is_state_new) {
@@ -143,6 +150,23 @@ void Enemy1::process_attack(double delta) {
     // Returns to NORMAL after the attack finishes
     if (!animationPlayer->is_playing()) {
         call_deferred("change_state", static_cast<int>(State::NORMAL));
+    }
+}
+
+// ================================== DIE STATE ===================================
+void Enemy1::process_die(double delta) {
+    (void)delta;
+    AnimationPlayer * animationPlayer = get_node<AnimationPlayer>("AnimationPlayer");  
+
+    // Plays die once when entering DIE
+    if (is_state_new) {
+        // Disables all collision shapes
+        get_node<CollisionPolygon2D>("CollisionPolygon2D")->set_disabled(true);
+        get_node<CollisionPolygon2D>("HurtboxArea/Hurtbox")->set_disabled(true);
+        get_node<CollisionPolygon2D>("BodyHitboxArea/BodyHitbox")->set_disabled(true);
+        get_node<CollisionPolygon2D>("AttackHitboxArea/AttackHitbox")->set_disabled(true);
+
+        animationPlayer->play("death");  
     }
 }
 
@@ -194,9 +218,20 @@ void Enemy1::match_player_position() {
     }
 }
 
+// Runs when another Area2D enters the Enemy1's hurtbox
 void Enemy1::_on_hurtbox_area_entered(Area2D *area) {
     get_node<Timer>("MaterialTimer")->start();
     get_node<Sprite2D>("SpriteArea/Sprite2D")->set_use_parent_material(false);
+    StringName areaName = area->get_name();
+
+    if (areaName == StringName("Attack1")) {
+        Health -= 100;
+    }
+
+    if (Health <= 0) {
+        call_deferred("change_state", static_cast<int>(State::DIE));
+    }
+
 }
 
 void Enemy1::_on_material_timer_timeout() {
