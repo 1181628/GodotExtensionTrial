@@ -96,31 +96,31 @@ void Player::process_normal(double delta) {
     // Get the player’s current velocity
     Vector2 velocity = get_velocity();
 
-    // gravity
+    // Gravity
     if (!is_on_floor()) {
         velocity.y += gravity * delta;
     }
 
-    // get movement
+    // Get movement
     double moveVector_y = 0;
     if (input->is_action_just_pressed("ui_accept")) {
         moveVector_y = -1;
     }
     double moveVector_x = input->get_axis("ui_left", "ui_right");
 
-    // jump
+    // Jump
     if (moveVector_y == -1 && is_on_floor()) {
         velocity.y = jumpSpeed * moveVector_y;
     }
 
-    // move left and right
+    // Move left and right
     if (moveVector_x != 0 ) {
         velocity.x += moveVector_x * horizontalAcceleration * delta;
     } else {
         velocity.x = velocity.x / 2;
     }
     
-    // limit left right speed
+    // Limit left right speed
     if (velocity.x < -maxHorizontalSpeed) {
         velocity.x = -maxHorizontalSpeed;
     }
@@ -128,6 +128,7 @@ void Player::process_normal(double delta) {
         velocity.x = maxHorizontalSpeed;
     }
 
+    // Change the state to ATTACK when attack was pressed
     if (input->is_action_just_pressed("attack")) {
         call_deferred("change_state", static_cast<int>(State::ATTACK));
     }
@@ -136,9 +137,9 @@ void Player::process_normal(double delta) {
     set_velocity(velocity);
     // Move the character
     move_and_slide();
-    // update animations on the character
+    // Update animations on the character
     _update_animation();
-    // update turning direction
+    // Update turning direction
     _turn_direction();
 }
 
@@ -160,16 +161,16 @@ void Player::process_attack(double delta) {
     if (!animationPlayer->is_playing()) {
         call_deferred("change_state", static_cast<int>(State::NORMAL));
     }
-
+    // Gravity but Player can jump/move during the same time
     apply_gravity_movement(delta);
 }
 
-// Placeholder for a future upward attack
+// Placeholder for a future upward attack behaviour
 void Player::process_attack_up(double delta) {
     current_state = State::NORMAL;
 }
 
-// Placeholder for a future downward attack
+// Placeholder for a future downward attack behaviour
 void Player::process_attack_down(double delta) {
     current_state = State::NORMAL;
 }
@@ -181,13 +182,16 @@ void Player::process_hurt(double delta) {
 
     // Play the hurt animation once when entering HURT
     if (is_state_new) {
+        // 1
         Sprite2D * sprite = get_node<Sprite2D>("Sprite2D");
         Area2D *attack1_area = get_node<Area2D>("Attack1");
         Area2D *hurtbox_area = get_node<Area2D>("HurtboxArea");
 
-        // When the Player moves, flip the sprite to face the direction it was moving toward
+        // Flip the sprite/attack1/hurtbox area to face the direction opposite to right
         if (hurtDirection == "right") {
+            // Knockback horizontal velocity
             velocity.x = 35;
+
             sprite->set_flip_h(true);
 
             Vector2 attack1_scale =attack1_area->get_scale();
@@ -197,10 +201,11 @@ void Player::process_hurt(double delta) {
             Vector2 hurtbox_scale = hurtbox_area->get_scale();
             hurtbox_scale.x = -1;
             hurtbox_area->set_scale(hurtbox_scale);
-
         }
+        // Flip the sprite/attack1/hurtbox area to face the direction opposite to left
         if (hurtDirection == "left") {
             velocity.x = -35;
+
             sprite->set_flip_h(false);
 
             Vector2 attack1_scale = attack1_area->get_scale();
@@ -211,6 +216,7 @@ void Player::process_hurt(double delta) {
             hurtbox_scale.x = 1;
             hurtbox_area->set_scale(hurtbox_scale);
         }
+        // Knockback vertical velocity
         velocity.y = -100;
         animationPlayer->play("getHit");
     }
@@ -221,6 +227,7 @@ void Player::process_hurt(double delta) {
     }
     // Saves and applies the knockback velocity
     set_velocity(velocity);
+    // Move the character under the knockback velocity
     move_and_slide();
 
     // Return to NORMAL when the attack animation finishes
@@ -234,17 +241,18 @@ void Player::process_die(double delta) {
     AnimationPlayer * animationPlayer = get_node<AnimationPlayer>("AnimationPlayer");
     Vector2 velocity = get_velocity();
 
-    // Applies gravity during the knockback
+    // Applies gravity during the death
     if (!is_on_floor()) {
         velocity.y += gravity * delta;
     }
-    // Saves and applies the knockback velocity
     set_velocity(velocity);
     move_and_slide();
 
-    // Play the die animation once when entering DIE
+    // Play the death animation once when entering DIE
     if (is_state_new) {
+        // Disable the hurtbox shape area after death
         get_node<CollisionPolygon2D>("HurtboxArea/Hurtbox")->set_disabled(true);
+        // Stop the invincibility timer
         get_node<Timer>("InvincibilityTimer")->stop();
         animationPlayer->play("death");
     }
@@ -260,25 +268,27 @@ void Player::_update_animation() {
     // Checks the Player's movement condition and selects a suitable animation
     if (!is_on_floor()) {
         if (velocity.y < 0) {
+            // Jump
             animationPlayer->play("idle");
         }
         if (velocity.y > 0) {
+            // Fall
             animationPlayer->play("idle");
         }
     }
     else if (moveVector_x != 0) {
+        // Run
         animationPlayer->play("idle"); 
     }
     else {
+        // Idle
         animationPlayer->play("idle");         
     }
 }   
 
 // Applies gravity, jumping and horizontal movement
 void Player::apply_gravity_movement(double delta) {
-    // Access Godot’s input system
     Input * input = Input::get_singleton();
-    // Get the player’s current velocity
     Vector2 velocity = get_velocity();
 
     // gravity
@@ -319,6 +329,7 @@ void Player::apply_gravity_movement(double delta) {
     move_and_slide();
 }
 
+// 2
 void Player::start_invincibility() {
     isInvincible = true;
 
@@ -368,7 +379,7 @@ void Player::_turn_direction() {
     Area2D *attack1_area = get_node<Area2D>("Attack1");
     Area2D *hurtbox_area = get_node<Area2D>("HurtboxArea");
 
-    // When the Player moves, flip the sprite to face the direction it was moving toward
+    // When the Player moves, flip the sprite/attack1/hurtbox collision area to face the direction it was moving toward
     if (moveVector_x < 0) {
         sprite->set_flip_h(true);
 
@@ -415,11 +426,12 @@ void Player::_on_hurtbox_area_entered(Area2D *area) {
         hurtDirection = "right";
     }
 
+    // Change state to DIE if Player has no more health otherwise change state to HURT
     if (player_status->playerStatusValue <= 0) {
         call_deferred("change_state", static_cast<int>(State::DIE));
     }
     else {
-        // Starts the invincibility frames
+        // Starts the invincibility frames 3
         start_invincibility();
         call_deferred("change_state", static_cast<int>(State::HURT));
     }
