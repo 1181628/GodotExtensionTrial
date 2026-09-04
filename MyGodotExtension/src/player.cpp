@@ -1,5 +1,6 @@
 #include "player.h"
 #include "playerStatus.h"
+#include "interactable.h"
 
 #include <godot_cpp/variant/vector2.hpp>
 #include <godot_cpp/classes/input.hpp>
@@ -48,7 +49,7 @@ void Player::_physics_process(double delta) {
     if (Engine::get_singleton()->is_editor_hint()) {
         return;
     }
-    
+
     //  Runs the behaviour belonging to the current state
     switch (current_state) {
         case State::NORMAL:
@@ -182,7 +183,7 @@ void Player::process_hurt(double delta) {
 
     // Play the hurt animation once when entering HURT
     if (is_state_new) {
-        // 1
+        // Finds the child nodes and stores them in pointers
         Sprite2D * sprite = get_node<Sprite2D>("Sprite2D");
         Area2D *attack1_area = get_node<Area2D>("Attack1");
         Area2D *hurtbox_area = get_node<Area2D>("HurtboxArea");
@@ -329,7 +330,7 @@ void Player::apply_gravity_movement(double delta) {
     move_and_slide();
 }
 
-// 2
+// Start the Player's invincibility frames
 void Player::start_invincibility() {
     isInvincible = true;
 
@@ -431,7 +432,7 @@ void Player::_on_hurtbox_area_entered(Area2D *area) {
         call_deferred("change_state", static_cast<int>(State::DIE));
     }
     else {
-        // Starts the invincibility frames 3
+        // Starts the invincibility frames
         start_invincibility();
         call_deferred("change_state", static_cast<int>(State::HURT));
     }
@@ -452,4 +453,14 @@ void Player::_on_attack1_area_entered(Area2D *area) {
 
     // Applies the changed position
     set_global_position(player_position);
+}
+
+void Player::_unhandled_input(const Ref<InputEvent> &event) {
+    // Interacts with the nearby object when the interact key is pressed
+    if (
+        event->is_action_pressed("interact") &&
+        interactingWith != nullptr
+    ) {
+        interactingWith->interact();
+    }
 }
