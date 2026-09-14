@@ -8,6 +8,7 @@
 #include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/variant/typed_array.hpp>
 #include <godot_cpp/classes/collision_polygon2d.hpp>
+#include <godot_cpp/classes/cpu_particles2d.hpp>
 
 using namespace godot;
 
@@ -226,6 +227,11 @@ void Enemy1::_on_hurtbox_area_entered(Area2D *area) {
     StringName areaName = area->get_name();
 
     PlayerStatus *player_status = get_node<PlayerStatus>("/root/PlayerStatusData");
+
+    CPUParticles2D *hit_particle = get_node<CPUParticles2D>("HitParticle");
+    hit_particle->set_position(Vector2(0, -15));
+    hit_particle->set_emitting(true);
+    hit_particle->restart();
 
     // Only deal damage if the entering area is the Player's Attack1 hitbox
     if (areaName == StringName("Attack1")) {
