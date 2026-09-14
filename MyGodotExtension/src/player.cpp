@@ -441,13 +441,13 @@ void Player::_on_hurtbox_area_entered(Area2D *area) {
 
     // Change state to DIE if Player has no more health otherwise change state to HURT
     if (player_status->health <= 0) {
-        gameCamera->camera_shake_big();
+        gameCamera->camera_shake_verybig();
         call_deferred("change_state", static_cast<int>(State::DIE));
     }
     else {
         // Starts the invincibility frames
         start_invincibility();
-        gameCamera->camera_shake_small();
+        gameCamera->camera_shake_big();
         call_deferred("change_state", static_cast<int>(State::HURT));
     }
 }
@@ -456,6 +456,9 @@ void Player::_on_hurtbox_area_entered(Area2D *area) {
 void Player::_on_attack1_area_entered(Area2D *area) {
     Sprite2D *sprite = get_node<Sprite2D>("Sprite2D");
     Vector2 player_position = get_global_position();
+
+    GameCamera *gameCamera = get_node<GameCamera>("/root/MainScene/GameCamera");
+    gameCamera->camera_shake_small();   
 
     if (!sprite->is_flipped_h()) {
         // Facing to the right, the player moves backward to the left

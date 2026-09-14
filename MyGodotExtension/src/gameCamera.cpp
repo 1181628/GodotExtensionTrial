@@ -1,4 +1,3 @@
-// game_camera.cpp
 #include "gameCamera.h"
 
 #include <godot_cpp/core/math.hpp>
@@ -32,10 +31,18 @@ void GameCamera::_process(double delta) {
 
 // Sets the shake strength to a small amount
 void GameCamera::camera_shake_small() {
-    strength = 3.0;
+    strength = 1.0;
+    recoverySpeed = 20.0;
 }
 
 // Sets the shake strength to a larger amount
 void GameCamera::camera_shake_big() {
+    strength = 3.0;
+    recoverySpeed = 20.0;
+}
+
+// Sets the shake strength to a very larger amount
+void GameCamera::camera_shake_verybig() {
     strength = 5.0;
+    recoverySpeed = 20.0;
 }
