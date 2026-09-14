@@ -15,13 +15,13 @@ enum class EnemyType {
     //BOSS
 };
 
-// Information about one enemy's type and position.
+// Structure of info about one enemy's type and position.
 struct EnemySpawn {
     EnemyType type;
     Vector2 position;
 };
 
-// structure of info that every room will have
+// Structure of info that every room will have
 struct RoomInfo {
     int room_id;
     

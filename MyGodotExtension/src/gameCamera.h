@@ -10,8 +10,8 @@ class GameCamera : public Camera2D {
     GDCLASS(GameCamera, Camera2D)
 
 private:
-	double strength = 0.0;
-    double recoverySpeed = 20.0;
+	double strength;
+    double recoverySpeed;
 
 protected:
     static void _bind_methods();
@@ -25,6 +25,7 @@ public:
 
     void camera_shake_small();
     void camera_shake_big();
+    void camera_shake_verybig();
 };
 
 }
