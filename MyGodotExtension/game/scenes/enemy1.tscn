@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://biri8gnjvlsh2" path="res://assets/enemy/Enemy1 Death.png" id="3_ncnv8"]
 [ext_resource type="Texture2D" uid="uid://c5aek0thavqqp" path="res://assets/enemy/Enemy1 GetHit.png" id="4_iolyx"]
 [ext_resource type="Texture2D" uid="uid://b5ff7hgd8se52" path="res://assets/enemy/Enemy1 Walk.png" id="4_lowyn"]
+[ext_resource type="PackedScene" uid="uid://ktpxc83s88c1" path="res://scenes/GameObjects/HitParticle.tscn" id="7_ye30t"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qwcan"]
 shader = ExtResource("1_nb0t0")
@@ -550,3 +551,5 @@ disabled = true
 
 [node name="MaterialTimer" type="Timer" parent="." unique_id=729944645]
 wait_time = 0.1
+
+[node name="HitParticle" parent="." unique_id=1182320173 instance=ExtResource("7_ye30t")]

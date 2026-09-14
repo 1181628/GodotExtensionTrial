@@ -2,6 +2,7 @@
 #include "playerStatus.h"
 #include "playerStatusBar.h"
 #include "interactable.h"
+#include "gameCamera.h"
 
 #include <godot_cpp/variant/vector2.hpp>
 #include <godot_cpp/classes/input.hpp>
@@ -278,16 +279,16 @@ void Player::_update_animation() {
     if (!is_on_floor()) {
         if (velocity.y < 0) {
             // Jump
-            animationPlayer->play("idle");
+            animationPlayer->play("jump");
         }
         if (velocity.y > 0) {
             // Fall
-            animationPlayer->play("idle");
+            animationPlayer->play("fall");
         }
     }
     else if (moveVector_x != 0) {
         // Run
-        animationPlayer->play("idle"); 
+        animationPlayer->play("walk"); 
     }
     else {
         // Idle
@@ -423,6 +424,7 @@ void Player::_on_hurtbox_area_entered(Area2D *area) {
 
     PlayerStatusBar *player_status_bar = get_node<PlayerStatusBar>("/root/StatusBar");
     PlayerStatus *player_status = get_node<PlayerStatus>("/root/PlayerStatusData");
+    GameCamera *gameCamera = get_node<GameCamera>("/root/MainScene/GameCamera");
 
     // Reduces the Player's health
     player_status->take_damage(1);
@@ -439,11 +441,13 @@ void Player::_on_hurtbox_area_entered(Area2D *area) {
 
     // Change state to DIE if Player has no more health otherwise change state to HURT
     if (player_status->health <= 0) {
+        gameCamera->camera_shake_big();
         call_deferred("change_state", static_cast<int>(State::DIE));
     }
     else {
         // Starts the invincibility frames
         start_invincibility();
+        gameCamera->camera_shake_small();
         call_deferred("change_state", static_cast<int>(State::HURT));
     }
 }
