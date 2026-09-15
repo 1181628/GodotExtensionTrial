@@ -1,4 +1,3 @@
-// game_camera.h
 #ifndef GAMECAMERA_H
 #define GAMECAMERA_H
 
@@ -27,6 +26,8 @@ public:
     void camera_shake_small();
     void camera_shake_big();
     void camera_shake_verybig();
+
+    void start_timer();
 };
 
 }

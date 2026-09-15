@@ -20,7 +20,7 @@ void RoomManager::_bind_methods() {
 }
 
 void RoomManager::_ready() {
-    // Lets Teleporter find this RoomManager.
+    // Lets Teleporter find this RoomManager
     add_to_group("room_manager");
 
     create_room_data();
@@ -52,8 +52,20 @@ void RoomManager::create_room_data() {
     // Room 3: Random enemy room 3
     rooms.push_back(RoomInfo{3, {
             { EnemyType::ENEMY1, Vector2(35, 80) },
-            { EnemyType::ENEMY1, Vector2(56, 80) },
+            { EnemyType::ENEMY1, Vector2(50, 80) },
             { EnemyType::ENEMY1, Vector2(88, 80) }
+        }
+    });
+
+    // Room 3: Random enemy room 4
+    rooms.push_back(RoomInfo{4, {
+            //
+        }
+    });
+
+    // Room 3: Random enemy room 5
+    rooms.push_back(RoomInfo{5, {
+            //
         }
     });
 }

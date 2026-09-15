@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7qnpwdip1wli"
-path="res://.godot/imported/player idle.png-35d56ea47c9e39659c62b9618796af06.ctex"
+uid="uid://bvrugx55ijkrn"
+path="res://.godot/imported/light.png-86427202465df6201dbfc9df5f3cc65b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/player/player idle.png"
-dest_files=["res://.godot/imported/player idle.png-35d56ea47c9e39659c62b9618796af06.ctex"]
+source_file="res://assets/tiles/light.png"
+dest_files=["res://.godot/imported/light.png-86427202465df6201dbfc9df5f3cc65b.ctex"]
 
 [params]
 
