@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6wwi8dxfa1c7"
-path="res://.godot/imported/pixellab--1788746192019.png-a7bc77cb533cd242f242d64d460c2e5d.ctex"
+uid="uid://bg1gfoqmrb0sh"
+path="res://.godot/imported/railing1.png-5533347fef86870806d950da2ac8ff9a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/pixellab--1788746192019.png"
-dest_files=["res://.godot/imported/pixellab--1788746192019.png-a7bc77cb533cd242f242d64d460c2e5d.ctex"]
+source_file="res://assets/tiles/railing1.png"
+dest_files=["res://.godot/imported/railing1.png-5533347fef86870806d950da2ac8ff9a.ctex"]
 
 [params]
 
