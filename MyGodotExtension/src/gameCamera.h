@@ -12,6 +12,7 @@ class GameCamera : public Camera2D {
 private:
 	double strength;
     double recoverySpeed;
+    Vector2 cameraStartPosition;
 
 protected:
     static void _bind_methods();

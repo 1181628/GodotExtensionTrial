@@ -9,7 +9,7 @@ point_count = 2
 
 [node name="HitParticle" type="CPUParticles2D" unique_id=1182320173]
 emitting = false
-amount = 10
+amount = 15
 texture = SubResource("CompressedTexture2D_jude3")
 lifetime = 0.5
 one_shot = true
