@@ -24,29 +24,21 @@ void GameCamera::_ready() {
 }
 
 void GameCamera::_process(double delta) {
-    // Find the player.
+    // Find the player
     Node2D *player = Object::cast_to<Node2D>(get_tree()->get_first_node_in_group("player"));
-
     Vector2 cameraPosition = get_global_position();
     Vector2 playerPosition = player->get_global_position();
+    float distanceX = player->get_global_position().x - cameraStartPosition.x;
 
-
-
-    float distanceX = player->get_global_position().x
-                    - cameraStartPosition.x;
-
-    // Follow slightly, within 10 units of the starting position.
+    // Follow slightly, within 10 units of the starting position
     float offsetX = Math::clamp(distanceX * 0.1f, -10.0f, 10.0f);
     float targetX = cameraStartPosition.x + offsetX;
-
     float weight = 1.0f - Math::exp(-2.0f * float(delta));
 
     cameraPosition.x = Math::lerp(cameraPosition.x, targetX, weight);
     cameraPosition.y = cameraStartPosition.y;
 
     set_global_position(cameraPosition);
-
-
 
     // Creates a random position between -strength and strength
     double randomX = -strength + (static_cast<double>(rand()) / RAND_MAX) * strength * 2;
@@ -55,6 +47,10 @@ void GameCamera::_process(double delta) {
     set_offset(Vector2(randomX, randomY));
     // Gradually reduces the shake strength until it reaches zero
     strength = Math::move_toward(strength, 0.0, recoverySpeed * delta);
+}
+
+void GameCamera::start_timer() {
+    float timer = Timer.new();
 }
 
 // Sets the shake strength to a small amount
