@@ -1,7 +1,6 @@
 #include "enemy1.h"
 #include "playerStatus.h"
 
-// Add other includes when needed.
 #include <godot_cpp/classes/animation_player.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/node2d.hpp>

@@ -27,7 +27,10 @@ public:
     void camera_shake_big();
     void camera_shake_verybig();
 
-    void start_timer();
+    void start_timer(double time_scale);
+    void _on_timer_timeout();
+    void player_hurt();
+    void room_cleared();
 };
 
 }
