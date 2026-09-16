@@ -5,6 +5,8 @@
 #include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/core/math.hpp>
 #include <godot_cpp/variant/vector2.hpp>
+#include <godot_cpp/classes/timer.hpp>
+#include <godot_cpp/variant/callable.hpp>
 
 #include <cstdlib>
 
@@ -49,10 +51,6 @@ void GameCamera::_process(double delta) {
     strength = Math::move_toward(strength, 0.0, recoverySpeed * delta);
 }
 
-void GameCamera::start_timer() {
-    float timer = Timer.new();
-}
-
 // Sets the shake strength to a small amount
 void GameCamera::camera_shake_small() {
     strength = 1.0;
@@ -69,4 +67,29 @@ void GameCamera::camera_shake_big() {
 void GameCamera::camera_shake_verybig() {
     strength = 5.0;
     recoverySpeed = 20.0;
+}
+
+void GameCamera::start_timer(double time_scale) {
+    Timer *timer = memnew(Timer);
+    timer->set_wait_time(0.03);
+    timer->set_one_shot(true);
+    timer->connect("timeout",callable_mp(this, &GameCamera::_on_timer_timeout));
+    add_child(timer);
+    Engine::get_singleton()->set_time_scale(time_scale);
+
+    timer->start();
+}
+
+void GameCamera::_on_timer_timeout() {
+    Engine::get_singleton()->set_time_scale(1.0);
+}
+
+void GameCamera::player_hurt() {
+    strength = 5;
+    start_timer(0.1);
+}
+
+void GameCamera::room_cleared() {
+    strength = 15;
+    start_timer(0.7);
 }

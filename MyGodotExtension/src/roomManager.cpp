@@ -1,4 +1,5 @@
 #include "roomManager.h"
+#include "saveManager.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
@@ -97,10 +98,28 @@ void RoomManager::load_room(int room_id) {
     }
 
     UtilityFunctions::print("Entered Room: ", current_room_id);
+    save_current_progress();
 }
 
 void RoomManager::go_to_next_room() {
     int next_room_id = current_room_id + 1;
 
     load_room(next_room_id);
+}
+
+void RoomManager::save_current_progress() {
+    // Finds SaveManager beside RoomManager
+    Node *save_manager_node =
+        get_node_or_null(NodePath("../SaveManager"));
+
+    SaveManager *save_manager =
+        Object::cast_to<SaveManager>(save_manager_node);
+
+    if (save_manager == nullptr) {
+        UtilityFunctions::print(
+            "SAVE ERROR: Cannot find SaveManager beside RoomManager.");
+        return;
+    }
+
+    save_manager->save_game(current_room_id);
 }

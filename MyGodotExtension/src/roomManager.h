@@ -52,6 +52,7 @@ public:
 
     void load_room(int room_id);
     void go_to_next_room();
+    void save_current_progress();
 };
 
 }

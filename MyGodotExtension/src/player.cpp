@@ -425,11 +425,13 @@ void Player::_on_hurtbox_area_entered(Area2D *area) {
     PlayerStatusBar *player_status_bar = get_node<PlayerStatusBar>("/root/StatusBar");
     PlayerStatus *player_status = get_node<PlayerStatus>("/root/PlayerStatusData");
     GameCamera *gameCamera = get_node<GameCamera>("/root/MainScene/GameCamera");
+    get_node<GameCamera>("/root/MainScene/GameCamera")->player_hurt();
 
     // Reduces the Player's health
     player_status->take_damage(1);
     // Updates the health bar animation
     player_status_bar->refresh_player_status();
+    gameCamera->camera_shake_big();
 
     // Checks whether the attack came from which side
     if (area->get_global_position().x > get_global_position().x) {
@@ -447,7 +449,6 @@ void Player::_on_hurtbox_area_entered(Area2D *area) {
     else {
         // Starts the invincibility frames
         start_invincibility();
-        gameCamera->camera_shake_big();
         call_deferred("change_state", static_cast<int>(State::HURT));
     }
 }
