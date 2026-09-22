@@ -32,7 +32,7 @@ void SaveManager::save_game(int current_room_id) {
     save_data["max_health"] = player_status->maxHealth;
     save_data["jump_height"] = player_status->jumpHeight;
     save_data["attack_damage"] = player_status->attackDamage;
-    save_date["max_horizontal_speed"] = player_status->maxHorizontalSpeed;
+    save_data["max_horizontal_speed"] = player_status->maxHorizontalSpeed;
 
     // Saves which room the Player has entered
     save_data["current_room_id"] = current_room_id;
